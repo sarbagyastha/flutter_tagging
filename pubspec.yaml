@@ -1,0 +1,20 @@
+name: flutter_tagging
+description: A flutter package with tagging functionality.
+version: 1.0.0
+author: Sarbagya Dhaubanjar <mail@sarbagyastha.com.np>
+homepage: https://github.com/sarbagyastha/flutter_tagging
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_typeahead: ^0.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
