@@ -15,7 +15,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_tagging: ^1.0.0
+  flutter_tagging: ^1.0.1
 ```
 
 #### 2\. Install
@@ -78,9 +78,11 @@ FlutterTagging(
 [Example sources](https://github.com/sarbagyastha/flutter_tagging/tree/master/example)
 
 
+
 ***Credit***
 
 This package uses [flutter_typeahead](https://pub.dartlang.org/packages/flutter_typeahead) in order to display typeahead TextField with suggestions.
+
 Huge thanks to [@AbdulRahmanAlHamali](https://github.com/AbdulRahmanAlHamali) for developing Flutter Typeahead.
 
 
