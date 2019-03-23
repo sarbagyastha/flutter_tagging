@@ -237,7 +237,16 @@ class FlutterTagging extends StatefulWidget {
     this.suggestionsBoxDecoration: const SuggestionsBoxDecoration(),
     this.transitionBuilder,
     this.debounceDuration: const Duration(milliseconds: 300),
-  });
+  })  : assert(suggestionsCallback != null),
+        assert(animationStart != null &&
+            animationStart >= 0.0 &&
+            animationStart <= 1.0),
+        assert(animationDuration != null),
+        assert(debounceDuration != null),
+        assert(suggestionsBoxDecoration != null),
+        assert(suggestionsBoxVerticalOffset != null),
+        assert(
+            direction == AxisDirection.down || direction == AxisDirection.up);
 
   @override
   _FlutterTaggingState createState() => _FlutterTaggingState();
