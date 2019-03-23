@@ -1,8 +1,8 @@
 # Flutter Tagging
 
-[[pub packages]](https://pub.dartlang.org/packages/flutter_tagging)
+[![Pub Package](https://img.shields.io/badge/Pub-v1.1.0-success.svg)](https://pub.dartlang.org/packages/flutter_tagging) [![licence](https://img.shields.io/badge/Licence-Apache-orange.svg)](https://github.com/sarbagyastha/flutter_tagging/blob/master/LICENSE)
 
-A flutter package with tagging or multiselect functionality. 
+A flutter package with tagging or multi-select functionality. 
 Useful for adding Tag or Label Selection Forms.
 
 ![DEMO](demo.gif) 
@@ -15,7 +15,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_tagging: ^1.0.1
+  flutter_tagging: ^1.1.0
 ```
 
 #### 2\. Install
@@ -72,6 +72,8 @@ FlutterTagging(
 ),
 ```
 
+For more detailed usage of properties, head on to [flutter_typeahead's documentation](https://pub.dartlang.org/documentation/flutter_typeahead/latest/).
+
 
 ## Example
 
@@ -83,7 +85,7 @@ FlutterTagging(
 
 This package uses [flutter_typeahead](https://pub.dartlang.org/packages/flutter_typeahead) in order to display typeahead TextField with suggestions.
 
-Huge thanks to [@AbdulRahmanAlHamali](https://github.com/AbdulRahmanAlHamali) for developing Flutter Typeahead.
+Huge thanks to [@AbdulRahmanAlHamali](https://github.com/AbdulRahmanAlHamali) and team for developing Flutter Typeahead.
 
 
 ## License
