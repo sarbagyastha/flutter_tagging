@@ -347,17 +347,18 @@ class _FlutterTaggingState extends State<FlutterTagging> {
                           backgroundColor: widget.chipsColor,
                           onDeleted: () {
                             if (labeledChips.length > 0) {
+                              var copiedChips = List.from(labeledChips);
                               for (var chips in labeledChips) {
                                 if (chips.key
                                     .toString()
                                     .contains(suggestion['name'])) {
                                   setState(() {
-                                    labeledChips.remove(chips);
+                                    copiedChips.remove(chips);
                                     _selectedTagValues
                                         .remove(suggestion['name']);
                                     List<dynamic> tags = <dynamic>[];
                                     var tag;
-                                    for (var chips in labeledChips) {
+                                    for (var chips in copiedChips) {
                                       tag = {
                                         'name':
                                             chips.key.toString().split("'")[1],
@@ -370,6 +371,9 @@ class _FlutterTaggingState extends State<FlutterTagging> {
                                   });
                                 }
                               }
+                              setState(() {
+                                labeledChips = List.from(copiedChips);
+                              });
                             }
                           },
                         ),
