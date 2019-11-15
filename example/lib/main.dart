@@ -43,20 +43,19 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(8.0),
               child: FlutterTagging(
                 textFieldDecoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Tags",
-                    labelText: "Enter tags"),
+                  border: OutlineInputBorder(),
+                  hintText: "Tags",
+                  labelText: "Enter tags",
+                ),
                 addButtonWidget: _buildAddButton(),
                 chipsColor: Colors.pinkAccent,
                 chipsFontColor: Colors.white,
-                deleteIcon: Icon(Icons.cancel,color: Colors.white),
+                deleteIcon: Icon(Icons.cancel, color: Colors.white),
                 chipsPadding: EdgeInsets.all(2.0),
                 chipsFontSize: 14.0,
                 chipsSpacing: 5.0,
                 chipsFontFamily: 'helvetica_neue_light',
-                suggestionsCallback: (pattern) async {
-                  return await TagSearchService.getSuggestions(pattern);
-                },
+                suggestionsCallback: LanguageService.getLanguages,
                 onChanged: (result) {
                   setState(() {
                     text = result.toString();
@@ -104,22 +103,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class TagSearchService {
-  static Future<List> getSuggestions(String query) async {
+class LanguageService {
+  static Future<List<Language>> getLanguages(String query) async {
     await Future.delayed(Duration(milliseconds: 400), null);
-    List<dynamic> tagList = <dynamic>[];
-    tagList.add({'name': "Flutter", 'value': 1});
-    tagList.add({'name': "HummingBird", 'value': 2});
-    tagList.add({'name': "Dart", 'value': 3});
-    List<dynamic> filteredTagList = <dynamic>[];
-    if (query.isNotEmpty) {
-      filteredTagList.add({'name': query, 'value': 0});
-    }
-    for (var tag in tagList) {
-      if (tag['name'].toLowerCase().contains(query)) {
-        filteredTagList.add(tag);
-      }
-    }
-    return filteredTagList;
+    return <Language>[
+      Language(name: 'JavaScript', position: 1),
+      Language(name: 'Python', position: 2),
+      Language(name: 'Java', position: 3),
+      Language(name: 'PHP', position: 4),
+      Language(name: 'C#', position: 5),
+      Language(name: 'C++', position: 6),
+    ];
   }
+}
+
+class Language {
+  final String name;
+  final int position;
+
+  Language({
+    this.name,
+    this.position,
+  });
 }

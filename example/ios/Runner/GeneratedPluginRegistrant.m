@@ -3,7 +3,7 @@
 //
 
 #import "GeneratedPluginRegistrant.h"
-#import <keyboard_visibility/KeyboardVisibilityPlugin.h>
+#import <flutter_keyboard_visibility/KeyboardVisibilityPlugin.h>
 
 @implementation GeneratedPluginRegistrant
 
