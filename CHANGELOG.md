@@ -1,4 +1,4 @@
-## [2.0.0] - November 17, 2019
+## [2.0.0+1] - November 17, 2019
 **BREAKING CHANGES**
 * Complete Refactor and Improvements.
 
