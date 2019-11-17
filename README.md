@@ -5,7 +5,7 @@
 A flutter package with tagging or multi-select functionality. 
 Useful for adding Tag or Label Selection Forms.
 
-![DEMO](flutter_tagging_demo.gif) 
+![DEMO](flutter_tagging.gif) 
 
 ## *Docs Coming Soon..*
 
