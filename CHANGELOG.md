@@ -1,12 +1,16 @@
-## [1.1.0] - March 23,2019.
+## [2.0.0] - November 17, 2019
+**BREAKING CHANGES**
+* Complete Refactor and Improvements.
+
+## [1.1.0] - March 23, 2019.
 
 * Updated dependency.
 * Added access to newer properties from flutter_typeahead.
 
-## [1.0.1] - December 30,2018.
+## [1.0.1] - December 30, 2018.
 
 * Added Description.
 
-## [1.0.0] - December 30,2018.
+## [1.0.0] - December 30, 2018.
 
 * Initial Release.
