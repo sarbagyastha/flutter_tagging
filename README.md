@@ -1,107 +1,41 @@
 # Flutter Tagging
 
-[![Pub Package](https://img.shields.io/badge/Pub-v1.1.0-success.svg)](https://pub.dartlang.org/packages/flutter_tagging) [![licence](https://img.shields.io/badge/Licence-Apache-orange.svg)](https://github.com/sarbagyastha/flutter_tagging/blob/master/LICENSE)
+[![Pub Package](https://img.shields.io/pub/v/flutter_tagging?color=dark-green&style=flat-square)](https://pub.dartlang.org/packages/flutter_tagging) [![licence](https://img.shields.io/badge/licence-BSD--3--Clause-orange.svg)](https://github.com/sarbagyastha/flutter_tagging/blob/master/LICENSE)
 
 A flutter package with tagging or multi-select functionality. 
 Useful for adding Tag or Label Selection Forms.
 
-![DEMO](demo.gif) 
+![DEMO](flutter_tagging_demo.gif) 
 
-## Usage
-
-#### 1\. Depend
-
-Add this to you package's `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  flutter_tagging: ^1.1.0
-```
-
-#### 2\. Install
-
-Run command:
-
-```bash
-$ flutter packages get
-```
-
-#### 3\. Import
-
-Import in Dart code:
-
-```dart
-import 'package:flutter_tagging/flutter_tagging.dart';
-```
-
-#### 4\. Using Flutter Tagging
-
-```dart
-///
-/// textFieldDecoration: Adds decoration to TextField.
-/// addButtonWidget: Button to be shown when new pattern is typed.
-/// chipsColor: Background Color of Chips. Default is light grey.
-/// chipsFontColor: Font Color of Chips. Default is black.
-/// deleteIcon: Delete Icon to be included in Chips. Default is Material Cancel Icon.
-/// chipsPadding: Imposes padding inside chips.
-/// chipsSpacing: Defines horizontal space between chips.
-/// suggestionsCallback: Callback to get suggestions as per the pattern entered.
-/// onChanged: Callback to get result on data change.
-///
-FlutterTagging(
-     textFieldDecoration: InputDecoration(
-         border: OutlineInputBorder(),
-         hintText: "Tags",
-         labelText: "Enter tags"),
-     addButtonWidget: _buildAddButton(),
-     chipsColor: Colors.pinkAccent,
-     chipsFontColor: Colors.white,
-     deleteIcon: Icon(Icons.cancel,color: Colors.white),
-     chipsPadding: EdgeInsets.all(2.0),
-     chipsFontSize: 14.0,
-     chipsSpacing: 5.0,
-     chipsFontFamily: 'helvetica_neue_light',
-     suggestionsCallback: (pattern) async {
-       return await TagSearchService.getSuggestions(pattern);
-       },
-     onChanged: (result) {
-       setState(() {
-         text = result.toString();
-         });
-       },
-),
-```
-
-For more detailed usage of properties, head on to [flutter_typeahead's documentation](https://pub.dartlang.org/documentation/flutter_typeahead/latest/).
-
-
-## Example
-
-[Example sources](https://github.com/sarbagyastha/flutter_tagging/tree/master/example)
-
-
-
-***Credit***
-
-This package uses [flutter_typeahead](https://pub.dartlang.org/packages/flutter_typeahead) in order to display typeahead TextField with suggestions.
-
-Huge thanks to [@AbdulRahmanAlHamali](https://github.com/AbdulRahmanAlHamali) and team for developing Flutter Typeahead.
+## *Docs Coming Soon..*
 
 
 ## License
 
 ```
-Copyright 2018 Sarbagya Dhaubanjar
+Copyright 2019 Sarbagya Dhaubanjar. All rights reserved.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
 
-   http://www.apache.org/licenses/LICENSE-2.0
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of Google Inc. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
