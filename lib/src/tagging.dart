@@ -10,37 +10,99 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'configurations.dart';
 import 'taggable.dart';
 
+///
 class FlutterTagging<T extends Taggable> extends StatefulWidget {
-  final TextEditingController controller;
   final ValueChanged<List<T>> onChanged;
-  final InputDecoration textFieldDecoration;
-  final FutureOr<List<T>> Function(String) suggestionsCallback;
+  final TextFieldConfiguration textFieldConfiguration;
+  final FutureOr<List<T>> Function(String) findSuggestions;
   final ChipConfiguration Function(T) configureChip;
   final SuggestionConfiguration Function(T) configureSuggestion;
+  final WrapConfiguration wrapConfiguration;
   final T Function(String) additionCallback;
   final Widget Function(BuildContext) loadingBuilder;
-  final Widget Function(BuildContext) noItemsFoundBuilder;
-  final Widget Function(BuildContext, T) errorBuilder;
-  final bool getImmediateSuggestions;
-  final double spacing;
-  final double runSpacing;
+  final Widget Function(BuildContext) emptyBuilder;
+  final Widget Function(BuildContext, Object) errorBuilder;
+  final dynamic Function(BuildContext, Widget, AnimationController) transitionBuilder;
+  final SuggestionsBoxConfiguration suggestionsBoxConfiguration;
+
+  /// The duration that [transitionBuilder] animation takes.
+  ///
+  /// This argument is best used with [transitionBuilder] and [animationStart]
+  /// to fully control the animation.
+  ///
+  /// Defaults to 500 milliseconds.
+  final Duration animationDuration;
+
+  /// The value at which the [transitionBuilder] animation starts.
+  ///
+  /// This argument is best used with [transitionBuilder] and [animationDuration]
+  /// to fully control the animation.
+  ///
+  /// Defaults to 0.25.
+  final double animationStart;
+
+  /// If set to true, no loading box will be shown while suggestions are
+  /// being fetched. [loadingBuilder] will also be ignored.
+  ///
+  /// Defaults to false.
+  final bool hideOnLoading;
+
+  /// If set to true, nothing will be shown if there are no results.
+  /// [emptyBuilder] will also be ignored.
+  ///
+  /// Defaults to false.
+  final bool hideOnEmpty;
+
+  /// If set to true, nothing will be shown if there is an error.
+  /// [errorBuilder] will also be ignored.
+  ///
+  /// Defaults to false.
+  final bool hideOnError;
+
+  /// The duration to wait after the user stops typing before calling
+  /// [findSuggestions].
+  ///
+  /// This is useful, because, if not set, a request for suggestions will be
+  /// sent for every character that the user types.
+  ///
+  /// This duration is set by default to 300 milliseconds.
+  final Duration debounceDuration;
+
+  /// If set to true, suggestions will be fetched immediately when the field is
+  /// added to the view.
+  ///
+  /// But the suggestions box will only be shown when the field receives focus.
+  /// To make the field receive focus immediately, you can set the `autofocus`
+  /// property in the [textFieldConfiguration] to true.
+  ///
+  /// Defaults to false.
+  final bool enableImmediateSuggestion;
 
   /// Creates a [FlutterTagging] widget.
   FlutterTagging({
-    this.controller,
     @required this.onChanged,
-    @required this.textFieldDecoration,
-    @required this.suggestionsCallback,
+    @required this.findSuggestions,
     @required this.configureChip,
     @required this.configureSuggestion,
     this.additionCallback,
-    this.getImmediateSuggestions = false,
+    this.enableImmediateSuggestion = false,
     this.errorBuilder,
     this.loadingBuilder,
-    this.noItemsFoundBuilder,
-    this.spacing = 0.0,
-    this.runSpacing = 0.0,
-  }) : assert(suggestionsCallback != null);
+    this.emptyBuilder,
+    this.wrapConfiguration = const WrapConfiguration(),
+    this.textFieldConfiguration = const TextFieldConfiguration(),
+    this.suggestionsBoxConfiguration = const SuggestionsBoxConfiguration(),
+    this.transitionBuilder,
+    this.debounceDuration = const Duration(milliseconds: 300),
+    this.hideOnEmpty = false,
+    this.hideOnError = false,
+    this.hideOnLoading = false,
+    this.animationDuration= const Duration(milliseconds: 500),
+    this.animationStart = 0.25,
+  })
+      : assert(findSuggestions != null),
+        assert(configureChip != null),
+        assert(configureSuggestion != null);
 
   @override
   _FlutterTaggingState<T> createState() => _FlutterTaggingState<T>();
@@ -48,20 +110,24 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
 
 class _FlutterTaggingState<T extends Taggable>
     extends State<FlutterTagging<T>> {
+  final List<T> _selectedValues = [];
+
   TextEditingController _textController;
-  FocusNode _focusNode = FocusNode();
-  List<T> _selectedValues = [];
+  FocusNode _focusNode;
   T _additionItem;
 
   @override
   void initState() {
     super.initState();
-    _textController = widget.controller ?? TextEditingController();
+    _textController =
+        widget.textFieldConfiguration.controller ?? TextEditingController();
+    _focusNode = widget.textFieldConfiguration.focusNode ?? FocusNode();
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -72,26 +138,39 @@ class _FlutterTaggingState<T extends Taggable>
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         TypeAheadField<T>(
-          getImmediateSuggestions: widget.getImmediateSuggestions,
+          getImmediateSuggestions: widget.enableImmediateSuggestion,
+          debounceDuration: widget.debounceDuration,
+          hideOnEmpty: widget.hideOnEmpty,
+          hideOnError: widget.hideOnError,
+          hideOnLoading: widget.hideOnLoading,
+          animationStart: widget.animationStart,
+          animationDuration: widget.animationDuration,
+          autoFlipDirection: widget.suggestionsBoxConfiguration.autoFlipDirection,
+          direction: widget.suggestionsBoxConfiguration.direction,
+          hideSuggestionsOnKeyboardHide: widget.suggestionsBoxConfiguration.hideSuggestionsOnKeyboardHide,
+          keepSuggestionsOnLoading: widget.suggestionsBoxConfiguration.keepSuggestionsOnLoading,
+          keepSuggestionsOnSuggestionSelected: widget.suggestionsBoxConfiguration.keepSuggestionsOnSuggestionSelected,
+          suggestionsBoxController: widget.suggestionsBoxConfiguration.suggestionsBoxController,
+          suggestionsBoxDecoration: widget.suggestionsBoxConfiguration.suggestionsBoxDecoration,
+          suggestionsBoxVerticalOffset: widget.suggestionsBoxConfiguration.suggestionsBoxVerticalOffset,
           errorBuilder: widget.errorBuilder,
-          loadingBuilder: (context) {
-            return widget.loadingBuilder ??
-                SizedBox(
-                  height: 3.0,
-                  child: LinearProgressIndicator(),
-                );
-          },
-          noItemsFoundBuilder: widget.noItemsFoundBuilder,
-          textFieldConfiguration: TextFieldConfiguration<T>(
+          transitionBuilder: widget.transitionBuilder,
+          loadingBuilder: (context) =>
+          widget.loadingBuilder ??
+              SizedBox(
+                height: 3.0,
+                child: LinearProgressIndicator(),
+              ),
+          noItemsFoundBuilder: widget.emptyBuilder,
+          textFieldConfiguration: widget.textFieldConfiguration.copyWith(
             focusNode: _focusNode,
             controller: _textController,
-            decoration: widget.textFieldDecoration,
+            enabled: widget.textFieldConfiguration.enabled &&
+                widget.onChanged != null,
           ),
           suggestionsCallback: (query) async {
-            var suggestions = await widget.suggestionsCallback(query);
-            suggestions.removeWhere(
-              (suggestion) => _selectedValues.contains(suggestion),
-            );
+            var suggestions = await widget.findSuggestions(query);
+            suggestions.removeWhere(_selectedValues.contains);
             if (widget.additionCallback != null && query.isNotEmpty) {
               var additionItem = widget.additionCallback(query);
               if (!suggestions.contains(additionItem) &&
@@ -112,7 +191,9 @@ class _FlutterTaggingState<T extends Taggable>
               subtitle: conf.subtitle,
               leading: conf.leading,
               trailing: InkWell(
-                splashColor: conf.splashColor ?? Theme.of(context).splashColor,
+                splashColor: conf.splashColor ?? Theme
+                    .of(context)
+                    .splashColor,
                 borderRadius: conf.splashRadius,
                 onTap: () {
                   setState(() {
@@ -145,11 +226,14 @@ class _FlutterTaggingState<T extends Taggable>
           },
         ),
         Wrap(
-          alignment: WrapAlignment.start,
-          crossAxisAlignment: WrapCrossAlignment.start,
-          runAlignment: WrapAlignment.start,
-          runSpacing: widget.runSpacing,
-          spacing: widget.spacing,
+          alignment: widget.wrapConfiguration.alignment,
+          crossAxisAlignment: widget.wrapConfiguration.crossAxisAlignment,
+          runAlignment: widget.wrapConfiguration.runAlignment,
+          runSpacing: widget.wrapConfiguration.runSpacing,
+          spacing: widget.wrapConfiguration.spacing,
+          direction: widget.wrapConfiguration.direction,
+          textDirection: widget.wrapConfiguration.textDirection,
+          verticalDirection: widget.wrapConfiguration.verticalDirection,
           children: _selectedValues.map<Widget>((item) {
             var conf = widget.configureChip(item);
             return Chip(

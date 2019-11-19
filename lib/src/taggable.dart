@@ -36,10 +36,10 @@ abstract class Taggable {
       identical(this, other) ||
       other is Taggable &&
           runtimeType == other.runtimeType &&
-          equals(props, other.props, caseSensitive);
+          _equals(props, other.props, caseSensitive);
 
   @override
-  int get hashCode => runtimeType.hashCode ^ mapPropsToHashCode(props);
+  int get hashCode => runtimeType.hashCode ^ _mapPropsToHashCode(props);
 
   @override
   String toString() => '$runtimeType';
@@ -62,29 +62,30 @@ mixin TaggableMixin implements Taggable {
     return identical(this, other) ||
         other is TaggableMixin &&
             runtimeType == other.runtimeType &&
-            equals(props, other.props, caseSensitive);
+            _equals(props, other.props, caseSensitive);
   }
 
   @override
-  int get hashCode => runtimeType.hashCode ^ mapPropsToHashCode(props);
+  int get hashCode => runtimeType.hashCode ^ _mapPropsToHashCode(props);
 
   @override
   String toString() => '$runtimeType';
 }
 
-int mapPropsToHashCode(dynamic props) {
-  int hashCode = 0;
+int _mapPropsToHashCode(dynamic props) {
+  var hashCode = 0;
 
   if (props is Map) {
     props.forEach((key, value) {
-      final propHashCode = mapPropsToHashCode(key) ^ mapPropsToHashCode(value);
+      final propHashCode =
+          _mapPropsToHashCode(key) ^ _mapPropsToHashCode(value);
       hashCode = hashCode ^ propHashCode;
     });
   } else if (props is List || props is Iterable || props is Set) {
     props.forEach((prop) {
       final propHashCode =
           (prop is List || prop is Iterable || prop is Set || prop is Map)
-              ? mapPropsToHashCode(prop)
+              ? _mapPropsToHashCode(prop)
               : prop.hashCode;
       hashCode = hashCode ^ propHashCode;
     });
@@ -97,13 +98,13 @@ int mapPropsToHashCode(dynamic props) {
 
 const DeepCollectionEquality _equality = DeepCollectionEquality();
 
-bool equals(List list1, List list2, bool caseSensitive) {
+bool _equals(List list1, List list2, bool caseSensitive) {
   if (identical(list1, list2)) return true;
   if (list1 == null || list2 == null) return false;
-  int length = list1.length;
+  var length = list1.length;
   if (length != list2.length) return false;
 
-  for (int i = 0; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     final unit1 = list1[i];
     final unit2 = list2[i];
 

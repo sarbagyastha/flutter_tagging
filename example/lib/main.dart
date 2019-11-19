@@ -6,6 +6,7 @@ import 'package:flutter_tagging/flutter_tagging.dart';
 
 void main() => runApp(MyApp());
 
+///
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,15 +17,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: MyHomePage(title: 'Flutter Tagging Demo'),
+      home: MyHomePage(),
     );
   }
 }
 
+///
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -36,22 +35,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Flutter Tagging Demo'),
       ),
       body: Column(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlutterTagging<Language>(
-              spacing: 6.0,
-              textFieldDecoration: InputDecoration(
-                border: InputBorder.none,
-                filled: true,
-                fillColor: Colors.green.withAlpha(30),
-                hintText: "Search Tags",
-                labelText: "Select Tags",
+              textFieldConfiguration: TextFieldConfiguration(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.green.withAlpha(30),
+                  hintText: "Search Tags",
+                  labelText: "Select Tags",
+                ),
               ),
-              suggestionsCallback: LanguageService.getLanguages,
+              findSuggestions: LanguageService.getLanguages,
               additionCallback: (value) {
                 return Language(
                   name: value,
@@ -114,7 +114,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+/// LanguageService
 class LanguageService {
+  /// Mocks fetching language from network API with delay of 500ms.
   static Future<List<Language>> getLanguages(String query) async {
     await Future.delayed(Duration(milliseconds: 500), null);
     return <Language>[
@@ -130,10 +132,12 @@ class LanguageService {
   }
 }
 
+/// Language Class
 class Language extends Taggable {
   final String name;
   final int position;
 
+  /// Creates Language
   Language({
     this.name,
     this.position,
@@ -142,6 +146,7 @@ class Language extends Taggable {
   @override
   List<Object> get props => [name];
 
+  /// Converts the class to json string.
   String toJson() => '''  {
     "name": $name,\n
     "position": $position\n

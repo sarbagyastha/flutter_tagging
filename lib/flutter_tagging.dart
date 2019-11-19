@@ -4,6 +4,9 @@
 
 library flutter_tagging;
 
+export 'package:flutter_typeahead/flutter_typeahead.dart'
+    show TextFieldConfiguration;
+
 export 'src/configurations.dart';
 export 'src/taggable.dart';
 export 'src/tagging.dart';
