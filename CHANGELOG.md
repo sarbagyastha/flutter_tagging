@@ -1,3 +1,6 @@
+## [2.0.0+2] - November 19, 2019
+* Setting `additionCallback` to null, disables the feature to add tags.
+
 ## [2.0.0+1] - November 17, 2019
 **BREAKING CHANGES**
 * Complete Refactor and Improvements.

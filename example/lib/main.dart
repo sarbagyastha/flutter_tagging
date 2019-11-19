@@ -51,13 +51,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 hintText: "Search Tags",
                 labelText: "Select Tags",
               ),
-              additionCallback: (query) {
+              suggestionsCallback: LanguageService.getLanguages,
+              additionCallback: (value) {
                 return Language(
-                  name: query,
+                  name: value,
                   position: 0,
                 );
               },
-              suggestionsCallback: LanguageService.getLanguages,
               configureSuggestion: (lang) {
                 return SuggestionConfiguration(
                   title: Text(lang.name),

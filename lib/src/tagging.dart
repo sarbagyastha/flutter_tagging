@@ -89,16 +89,18 @@ class _FlutterTaggingState<T extends Taggable>
           ),
           suggestionsCallback: (query) async {
             var suggestions = await widget.suggestionsCallback(query);
-            var additionItem = widget.additionCallback(query);
             suggestions.removeWhere(
               (suggestion) => _selectedValues.contains(suggestion),
             );
-            if (!suggestions.contains(additionItem) &&
-                !_selectedValues.contains(additionItem)) {
-              _additionItem = additionItem;
-              suggestions.insert(0, additionItem);
-            } else {
-              _additionItem = null;
+            if (widget.additionCallback != null && query.isNotEmpty) {
+              var additionItem = widget.additionCallback(query);
+              if (!suggestions.contains(additionItem) &&
+                  !_selectedValues.contains(additionItem)) {
+                _additionItem = additionItem;
+                suggestions.insert(0, additionItem);
+              } else {
+                _additionItem = null;
+              }
             }
             return suggestions;
           },

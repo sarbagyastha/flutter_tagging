@@ -17,7 +17,7 @@ class SuggestionConfiguration {
 
   SuggestionConfiguration({
     @required this.title,
-    @required this.subtitle,
+    this.subtitle,
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 16.0),
     this.dense,
     this.isThreeLine = false,
