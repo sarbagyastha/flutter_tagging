@@ -336,7 +336,7 @@ class WrapConfiguration {
 }
 
 ///
-class SuggestionsBoxConfiguration{
+class SuggestionsBoxConfiguration {
   /// If set to false, the suggestions box will stay opened after
   /// the keyboard is closed.
   ///
@@ -405,5 +405,5 @@ class SuggestionsBoxConfiguration{
     this.suggestionsBoxController,
     this.suggestionsBoxDecoration,
     this.suggestionsBoxVerticalOffset = 5.0,
-});
+  });
 }

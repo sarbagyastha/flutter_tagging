@@ -19,10 +19,12 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
   final SuggestionConfiguration Function(T) configureSuggestion;
   final WrapConfiguration wrapConfiguration;
   final T Function(String) additionCallback;
+  final FutureOr<T> Function(T) onAdded;
   final Widget Function(BuildContext) loadingBuilder;
   final Widget Function(BuildContext) emptyBuilder;
   final Widget Function(BuildContext, Object) errorBuilder;
-  final dynamic Function(BuildContext, Widget, AnimationController) transitionBuilder;
+  final dynamic Function(BuildContext, Widget, AnimationController)
+      transitionBuilder;
   final SuggestionsBoxConfiguration suggestionsBoxConfiguration;
 
   /// The duration that [transitionBuilder] animation takes.
@@ -97,10 +99,10 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
     this.hideOnEmpty = false,
     this.hideOnError = false,
     this.hideOnLoading = false,
-    this.animationDuration= const Duration(milliseconds: 500),
+    this.animationDuration = const Duration(milliseconds: 500),
     this.animationStart = 0.25,
-  })
-      : assert(findSuggestions != null),
+    this.onAdded,
+  })  : assert(findSuggestions != null),
         assert(configureChip != null),
         assert(configureSuggestion != null);
 
@@ -145,18 +147,25 @@ class _FlutterTaggingState<T extends Taggable>
           hideOnLoading: widget.hideOnLoading,
           animationStart: widget.animationStart,
           animationDuration: widget.animationDuration,
-          autoFlipDirection: widget.suggestionsBoxConfiguration.autoFlipDirection,
+          autoFlipDirection:
+              widget.suggestionsBoxConfiguration.autoFlipDirection,
           direction: widget.suggestionsBoxConfiguration.direction,
-          hideSuggestionsOnKeyboardHide: widget.suggestionsBoxConfiguration.hideSuggestionsOnKeyboardHide,
-          keepSuggestionsOnLoading: widget.suggestionsBoxConfiguration.keepSuggestionsOnLoading,
-          keepSuggestionsOnSuggestionSelected: widget.suggestionsBoxConfiguration.keepSuggestionsOnSuggestionSelected,
-          suggestionsBoxController: widget.suggestionsBoxConfiguration.suggestionsBoxController,
-          suggestionsBoxDecoration: widget.suggestionsBoxConfiguration.suggestionsBoxDecoration,
-          suggestionsBoxVerticalOffset: widget.suggestionsBoxConfiguration.suggestionsBoxVerticalOffset,
+          hideSuggestionsOnKeyboardHide:
+              widget.suggestionsBoxConfiguration.hideSuggestionsOnKeyboardHide,
+          keepSuggestionsOnLoading:
+              widget.suggestionsBoxConfiguration.keepSuggestionsOnLoading,
+          keepSuggestionsOnSuggestionSelected: widget
+              .suggestionsBoxConfiguration.keepSuggestionsOnSuggestionSelected,
+          suggestionsBoxController:
+              widget.suggestionsBoxConfiguration.suggestionsBoxController,
+          suggestionsBoxDecoration:
+              widget.suggestionsBoxConfiguration.suggestionsBoxDecoration,
+          suggestionsBoxVerticalOffset:
+              widget.suggestionsBoxConfiguration.suggestionsBoxVerticalOffset,
           errorBuilder: widget.errorBuilder,
           transitionBuilder: widget.transitionBuilder,
           loadingBuilder: (context) =>
-          widget.loadingBuilder ??
+              widget.loadingBuilder ??
               SizedBox(
                 height: 3.0,
                 child: LinearProgressIndicator(),
@@ -191,14 +200,15 @@ class _FlutterTaggingState<T extends Taggable>
               subtitle: conf.subtitle,
               leading: conf.leading,
               trailing: InkWell(
-                splashColor: conf.splashColor ?? Theme
-                    .of(context)
-                    .splashColor,
+                splashColor: conf.splashColor ?? Theme.of(context).splashColor,
                 borderRadius: conf.splashRadius,
-                onTap: () {
-                  setState(() {
+                onTap: () async {
+                  if (widget.onAdded != null) {
+                    _selectedValues.add(await widget.onAdded(item));
+                  } else {
                     _selectedValues.add(item);
-                  });
+                  }
+                  setState(() {});
                   widget.onChanged(_selectedValues);
                   _textController.clear();
                   _focusNode.unfocus();
