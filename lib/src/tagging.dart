@@ -12,19 +12,68 @@ import 'taggable.dart';
 
 ///
 class FlutterTagging<T extends Taggable> extends StatefulWidget {
+  /// Called every time the value changes.
+  ///  i.e. when items are selected or removed.
   final ValueChanged<List<T>> onChanged;
+
+  /// The configuration of the [TextField] that the [FlutterTagging] widget displays.
   final TextFieldConfiguration textFieldConfiguration;
+
+  /// Called with the search pattern to get the search suggestions.
+  ///
+  /// This callback must not be null. It is be called by the FlutterTagging widget
+  /// and provided with the search pattern. It should return a [List]
+  /// of suggestions either synchronously, or asynchronously (as the result of a
+  /// [Future].
+  /// Typically, the list of suggestions should not contain more than 4 or 5
+  /// entries. These entries will then be provided to [itemBuilder] to display
+  /// the suggestions.
+  ///
+  /// Example:
+  /// ```dart
+  /// findSuggestions: (pattern) async {
+  ///   return await _getSuggestions(pattern);
+  /// }
+  /// ```
   final FutureOr<List<T>> Function(String) findSuggestions;
+
+  /// The configuration of [Chip]s that are displayed for selected tags.
   final ChipConfiguration Function(T) configureChip;
+
+  /// The configuration of suggestions displayed when [findSuggestions] finishes.
   final SuggestionConfiguration Function(T) configureSuggestion;
+
+  /// The configuration of selected tags like their spacing, direction, etc.
   final WrapConfiguration wrapConfiguration;
+
+  /// Defines an object for search pattern.
+  ///
+  /// If null, tag addition feature is disabled.
   final T Function(String) additionCallback;
+
+  /// Called when add to tag button is pressed.
+  ///
+  /// Api Calls to add the tag can be called here.
   final FutureOr<T> Function(T) onAdded;
+
+  /// Called when waiting for [findSuggestions] to return.
   final Widget Function(BuildContext) loadingBuilder;
+
+  /// Called when [findSuggestions] returns an empty list.
   final Widget Function(BuildContext) emptyBuilder;
+
+  /// Called when [findSuggestions] throws an exception.
   final Widget Function(BuildContext, Object) errorBuilder;
+
+  /// Called to display animations when [findSuggestions] returns suggestions.
+  ///
+  /// It is provided with the suggestions box instance and the animation
+  /// controller, and expected to return some animation that uses the controller
+  /// to display the suggestion box.
   final dynamic Function(BuildContext, Widget, AnimationController)
       transitionBuilder;
+
+  /// The configuration of suggestion box.
   final SuggestionsBoxConfiguration suggestionsBoxConfiguration;
 
   /// The duration that [transitionBuilder] animation takes.
@@ -204,7 +253,10 @@ class _FlutterTaggingState<T extends Taggable>
                 borderRadius: conf.splashRadius,
                 onTap: () async {
                   if (widget.onAdded != null) {
-                    _selectedValues.add(await widget.onAdded(item));
+                    var _item = await widget.onAdded(item);
+                    if (_item != null) {
+                      _selectedValues.add(_item);
+                    }
                   } else {
                     _selectedValues.add(item);
                   }

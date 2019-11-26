@@ -1,3 +1,8 @@
+## [2.1.0] - November 26, 2019
+**BREAKING CHANGES**
+* Some properties are renamed and added.
+* Added dart docs. Refined docs will be added in future.
+
 ## [2.0.0+2] - November 19, 2019
 * Setting `additionCallback` to null, disables the feature to add tags.
 

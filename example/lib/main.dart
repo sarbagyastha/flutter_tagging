@@ -134,7 +134,10 @@ class LanguageService {
 
 /// Language Class
 class Language extends Taggable {
+  ///
   final String name;
+
+  ///
   final int position;
 
   /// Creates Language

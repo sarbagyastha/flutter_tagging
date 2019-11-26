@@ -397,13 +397,13 @@ class SuggestionsBoxConfiguration {
 
   ///
   const SuggestionsBoxConfiguration({
-    this.direction,
+    this.direction = AxisDirection.down,
     this.autoFlipDirection = false,
     this.hideSuggestionsOnKeyboardHide = true,
     this.keepSuggestionsOnLoading = true,
     this.keepSuggestionsOnSuggestionSelected = false,
     this.suggestionsBoxController,
-    this.suggestionsBoxDecoration,
+    this.suggestionsBoxDecoration = const SuggestionsBoxDecoration(),
     this.suggestionsBoxVerticalOffset = 5.0,
   });
 }
