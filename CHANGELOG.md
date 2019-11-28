@@ -1,4 +1,4 @@
-## [2.1.0+1] - November 28, 2019
+## [2.1.0+2] - November 28, 2019
 * Added support for Flutter Web
 
 ## [2.1.0] - November 26, 2019
