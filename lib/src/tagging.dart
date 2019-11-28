@@ -5,7 +5,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter_typeahead_web/flutter_typeahead.dart';
 
 import 'configurations.dart';
 import 'taggable.dart';

@@ -1,3 +1,6 @@
+## [2.1.0+1] - November 28, 2019
+* Added support for Flutter Web
+
 ## [2.1.0] - November 26, 2019
 **BREAKING CHANGES**
 * Some properties are renamed and added.
