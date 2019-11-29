@@ -1,3 +1,7 @@
+## [2.2.0] - November 29, 2019
+**BREAKING CHANGES**
+* Added mandatory `initialItems` property.
+
 ## [2.1.0+2] - November 28, 2019
 * Added support for Flutter Web
 

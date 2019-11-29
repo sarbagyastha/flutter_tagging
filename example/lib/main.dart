@@ -30,6 +30,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _selectedValuesJson = "Nothing to show";
+  List<Language> _selectedLanguages;
+
+  @override
+  void initState() {
+    _selectedLanguages = [];
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _selectedLanguages.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlutterTagging<Language>(
+              initialItems: _selectedLanguages,
               textFieldConfiguration: TextFieldConfiguration(
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -85,9 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   deleteIconColor: Colors.white,
                 );
               },
-              onChanged: (selectedLanguages) {
+              onChanged: () {
                 setState(() {
-                  _selectedValuesJson = selectedLanguages
+                  _selectedValuesJson = _selectedLanguages
                       .map<String>((lang) => '\n${lang.toJson()}')
                       .toList()
                       .toString();
