@@ -1,4 +1,4 @@
-## [2.2.0] - November 29, 2019
+## [2.2.0+1] - November 29, 2019
 **BREAKING CHANGES**
 * Added mandatory `initialItems` property.
 

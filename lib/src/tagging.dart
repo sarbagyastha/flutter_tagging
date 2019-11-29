@@ -226,8 +226,7 @@ class _FlutterTaggingState<T extends Taggable>
           textFieldConfiguration: widget.textFieldConfiguration.copyWith(
             focusNode: _focusNode,
             controller: _textController,
-            enabled: widget.textFieldConfiguration.enabled &&
-                widget.onChanged != null,
+            enabled: widget.textFieldConfiguration.enabled,
           ),
           suggestionsCallback: (query) async {
             var suggestions = await widget.findSuggestions(query);
