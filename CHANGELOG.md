@@ -1,3 +1,6 @@
+## [2.2.0+2] - December 2, 2019
+* Changed defaults for `spacing` and `runSpacing` to 8.0
+
 ## [2.2.0+1] - November 29, 2019
 **BREAKING CHANGES**
 * Added mandatory `initialItems` property.
