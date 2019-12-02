@@ -223,7 +223,7 @@ class WrapConfiguration {
   /// others), the additional free space will be allocated according to the
   /// [alignment].
   ///
-  /// Defaults to 0.0.
+  /// Defaults to 8.0.
   final double spacing;
 
   /// How the runs themselves should be placed in the cross axis.
@@ -250,7 +250,7 @@ class WrapConfiguration {
   /// the wrap has a minimum size that is not filled), the additional free space
   /// will be allocated according to the [runAlignment].
   ///
-  /// Defaults to 0.0.
+  /// Defaults to 8.0.
   final double runSpacing;
 
   /// How the children within a run should be aligned relative to each other in
@@ -326,9 +326,9 @@ class WrapConfiguration {
   const WrapConfiguration({
     this.direction = Axis.horizontal,
     this.alignment = WrapAlignment.start,
-    this.spacing = 0.0,
+    this.spacing = 8.0,
     this.runAlignment = WrapAlignment.start,
-    this.runSpacing = 0.0,
+    this.runSpacing = 8.0,
     this.crossAxisAlignment = WrapCrossAlignment.start,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
