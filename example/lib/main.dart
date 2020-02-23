@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _selectedValuesJson = "Nothing to show";
+  String _selectedValuesJson = 'Nothing to show';
   List<Language> _selectedLanguages;
 
   @override
@@ -61,8 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   border: InputBorder.none,
                   filled: true,
                   fillColor: Colors.green.withAlpha(30),
-                  hintText: "Search Tags",
-                  labelText: "Select Tags",
+                  hintText: 'Search Tags',
+                  labelText: 'Select Tags',
                 ),
               ),
               findSuggestions: LanguageService.getLanguages,
@@ -71,6 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   name: value,
                   position: 0,
                 );
+              },
+              onAdded: (language) {
+                // api calls here, triggered when add to tag button is pressed
+                return Language();
               },
               configureSuggestion: (lang) {
                 return SuggestionConfiguration(

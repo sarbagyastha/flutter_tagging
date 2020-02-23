@@ -1,3 +1,6 @@
+## [2.2.0+3] - February 23, 2020
+* Minor docs changes
+
 ## [2.2.0+2] - December 2, 2019
 * Changed defaults for `spacing` and `runSpacing` to 8.0
 
