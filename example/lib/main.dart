@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               onAdded: (language) {
                 // api calls here, triggered when add to tag button is pressed
-                return Language();
+                return Language(name: language.name, position: language.position);
               },
               configureSuggestion: (lang) {
                 return SuggestionConfiguration(
