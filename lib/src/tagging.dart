@@ -70,8 +70,7 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
   /// It is provided with the suggestions box instance and the animation
   /// controller, and expected to return some animation that uses the controller
   /// to display the suggestion box.
-  final dynamic Function(BuildContext, Widget, AnimationController)
-      transitionBuilder;
+  final dynamic Function(BuildContext, Widget, AnimationController) transitionBuilder;
 
   /// The configuration of suggestion box.
   final SuggestionsBoxConfiguration suggestionsBoxConfiguration;
@@ -132,6 +131,8 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
   ///
   final List<T> initialItems;
 
+  final int limit;
+
   /// Creates a [FlutterTagging] widget.
   FlutterTagging({
     @required this.initialItems,
@@ -155,6 +156,7 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationStart = 0.25,
     this.onAdded,
+    this.limit = -1,
   })  : assert(initialItems != null),
         assert(findSuggestions != null),
         assert(configureChip != null),
@@ -164,8 +166,7 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
   _FlutterTaggingState<T> createState() => _FlutterTaggingState<T>();
 }
 
-class _FlutterTaggingState<T extends Taggable>
-    extends State<FlutterTagging<T>> {
+class _FlutterTaggingState<T extends Taggable> extends State<FlutterTagging<T>> {
   TextEditingController _textController;
   FocusNode _focusNode;
   T _additionItem;
@@ -173,8 +174,7 @@ class _FlutterTaggingState<T extends Taggable>
   @override
   void initState() {
     super.initState();
-    _textController =
-        widget.textFieldConfiguration.controller ?? TextEditingController();
+    _textController = widget.textFieldConfiguration.controller ?? TextEditingController();
     _focusNode = widget.textFieldConfiguration.focusNode ?? FocusNode();
   }
 
@@ -187,6 +187,7 @@ class _FlutterTaggingState<T extends Taggable>
 
   @override
   Widget build(BuildContext context) {
+    bool limitEnabled = (widget.limit > 0 && widget.initialItems.length >= widget.limit);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -199,21 +200,14 @@ class _FlutterTaggingState<T extends Taggable>
           hideOnLoading: widget.hideOnLoading,
           animationStart: widget.animationStart,
           animationDuration: widget.animationDuration,
-          autoFlipDirection:
-              widget.suggestionsBoxConfiguration.autoFlipDirection,
+          autoFlipDirection: widget.suggestionsBoxConfiguration.autoFlipDirection,
           direction: widget.suggestionsBoxConfiguration.direction,
-          hideSuggestionsOnKeyboardHide:
-              widget.suggestionsBoxConfiguration.hideSuggestionsOnKeyboardHide,
-          keepSuggestionsOnLoading:
-              widget.suggestionsBoxConfiguration.keepSuggestionsOnLoading,
-          keepSuggestionsOnSuggestionSelected: widget
-              .suggestionsBoxConfiguration.keepSuggestionsOnSuggestionSelected,
-          suggestionsBoxController:
-              widget.suggestionsBoxConfiguration.suggestionsBoxController,
-          suggestionsBoxDecoration:
-              widget.suggestionsBoxConfiguration.suggestionsBoxDecoration,
-          suggestionsBoxVerticalOffset:
-              widget.suggestionsBoxConfiguration.suggestionsBoxVerticalOffset,
+          hideSuggestionsOnKeyboardHide: widget.suggestionsBoxConfiguration.hideSuggestionsOnKeyboardHide,
+          keepSuggestionsOnLoading: widget.suggestionsBoxConfiguration.keepSuggestionsOnLoading,
+          keepSuggestionsOnSuggestionSelected: widget.suggestionsBoxConfiguration.keepSuggestionsOnSuggestionSelected,
+          suggestionsBoxController: widget.suggestionsBoxConfiguration.suggestionsBoxController,
+          suggestionsBoxDecoration: widget.suggestionsBoxConfiguration.suggestionsBoxDecoration,
+          suggestionsBoxVerticalOffset: widget.suggestionsBoxConfiguration.suggestionsBoxVerticalOffset,
           errorBuilder: widget.errorBuilder,
           transitionBuilder: widget.transitionBuilder,
           loadingBuilder: (context) =>
@@ -226,15 +220,17 @@ class _FlutterTaggingState<T extends Taggable>
           textFieldConfiguration: widget.textFieldConfiguration.copyWith(
             focusNode: _focusNode,
             controller: _textController,
-            enabled: widget.textFieldConfiguration.enabled,
+            enabled: widget.textFieldConfiguration.enabled && !limitEnabled,
           ),
           suggestionsCallback: (query) async {
+            if (limitEnabled) {
+              return [];
+            }
             var suggestions = await widget.findSuggestions(query);
             suggestions.removeWhere(widget.initialItems.contains);
             if (widget.additionCallback != null && query.isNotEmpty) {
               var additionItem = widget.additionCallback(query);
-              if (!suggestions.contains(additionItem) &&
-                  !widget.initialItems.contains(additionItem)) {
+              if (!suggestions.contains(additionItem) && !widget.initialItems.contains(additionItem)) {
                 _additionItem = additionItem;
                 suggestions.insert(0, additionItem);
               } else {
