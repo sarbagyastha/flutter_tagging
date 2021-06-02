@@ -132,6 +132,9 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
   ///
   final List<T> initialItems;
 
+  // Limit max number of visible items
+  final int limit;
+
   /// Creates a [FlutterTagging] widget.
   FlutterTagging({
     @required this.initialItems,
@@ -155,6 +158,7 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationStart = 0.25,
     this.onAdded,
+    this.limit = -1,
   })  : assert(initialItems != null),
         assert(findSuggestions != null),
         assert(configureChip != null),
@@ -187,111 +191,118 @@ class _FlutterTaggingState<T extends Taggable>
 
   @override
   Widget build(BuildContext context) {
+    bool limitEnabled = (widget.limit > 0 && widget.initialItems.length >= widget.limit);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        TypeAheadField<T>(
-          getImmediateSuggestions: widget.enableImmediateSuggestion,
-          debounceDuration: widget.debounceDuration,
-          hideOnEmpty: widget.hideOnEmpty,
-          hideOnError: widget.hideOnError,
-          hideOnLoading: widget.hideOnLoading,
-          animationStart: widget.animationStart,
-          animationDuration: widget.animationDuration,
-          autoFlipDirection:
+        Visibility(
+          visible: !limitEnabled,
+          child: TypeAheadField<T>(
+            getImmediateSuggestions: widget.enableImmediateSuggestion,
+            debounceDuration: widget.debounceDuration,
+            hideOnEmpty: widget.hideOnEmpty,
+            hideOnError: widget.hideOnError,
+            hideOnLoading: widget.hideOnLoading,
+            animationStart: widget.animationStart,
+            animationDuration: widget.animationDuration,
+            autoFlipDirection:
               widget.suggestionsBoxConfiguration.autoFlipDirection,
-          direction: widget.suggestionsBoxConfiguration.direction,
-          hideSuggestionsOnKeyboardHide:
-              widget.suggestionsBoxConfiguration.hideSuggestionsOnKeyboardHide,
-          keepSuggestionsOnLoading:
-              widget.suggestionsBoxConfiguration.keepSuggestionsOnLoading,
-          keepSuggestionsOnSuggestionSelected: widget
-              .suggestionsBoxConfiguration.keepSuggestionsOnSuggestionSelected,
-          suggestionsBoxController:
-              widget.suggestionsBoxConfiguration.suggestionsBoxController,
-          suggestionsBoxDecoration:
-              widget.suggestionsBoxConfiguration.suggestionsBoxDecoration,
-          suggestionsBoxVerticalOffset:
-              widget.suggestionsBoxConfiguration.suggestionsBoxVerticalOffset,
-          errorBuilder: widget.errorBuilder,
-          transitionBuilder: widget.transitionBuilder,
-          loadingBuilder: (context) =>
-              widget.loadingBuilder ??
-              SizedBox(
-                height: 3.0,
-                child: LinearProgressIndicator(),
-              ),
-          noItemsFoundBuilder: widget.emptyBuilder,
-          textFieldConfiguration: widget.textFieldConfiguration.copyWith(
-            focusNode: _focusNode,
-            controller: _textController,
-            enabled: widget.textFieldConfiguration.enabled,
-          ),
-          suggestionsCallback: (query) async {
-            var suggestions = await widget.findSuggestions(query);
-            suggestions.removeWhere(widget.initialItems.contains);
-            if (widget.additionCallback != null && query.isNotEmpty) {
-              var additionItem = widget.additionCallback(query);
-              if (!suggestions.contains(additionItem) &&
-                  !widget.initialItems.contains(additionItem)) {
-                _additionItem = additionItem;
-                suggestions.insert(0, additionItem);
-              } else {
-                _additionItem = null;
-              }
-            }
-            return suggestions;
-          },
-          itemBuilder: (context, item) {
-            var conf = widget.configureSuggestion(item);
-            return ListTile(
-              key: ObjectKey(item),
-              title: conf.title,
-              subtitle: conf.subtitle,
-              leading: conf.leading,
-              trailing: InkWell(
-                splashColor: conf.splashColor ?? Theme.of(context).splashColor,
-                borderRadius: conf.splashRadius,
-                onTap: () async {
-                  if (widget.onAdded != null) {
-                    var _item = await widget.onAdded(item);
-                    if (_item != null) {
-                      widget.initialItems.add(_item);
-                    }
-                  } else {
-                    widget.initialItems.add(item);
-                  }
-                  setState(() {});
-                  if (widget.onChanged != null) {
-                    widget.onChanged();
-                  }
-                  _textController.clear();
-                  _focusNode.unfocus();
-                },
-                child: Builder(
-                  builder: (context) {
-                    if (_additionItem != null && _additionItem == item) {
-                      return conf.additionWidget;
-                    } else {
-                      return SizedBox(width: 0);
-                    }
-                  },
+            direction: widget.suggestionsBoxConfiguration.direction,
+            hideSuggestionsOnKeyboardHide:
+                widget.suggestionsBoxConfiguration.hideSuggestionsOnKeyboardHide,
+            keepSuggestionsOnLoading:
+                widget.suggestionsBoxConfiguration.keepSuggestionsOnLoading,
+            keepSuggestionsOnSuggestionSelected: widget
+                .suggestionsBoxConfiguration.keepSuggestionsOnSuggestionSelected,
+            suggestionsBoxController:
+                widget.suggestionsBoxConfiguration.suggestionsBoxController,
+            suggestionsBoxDecoration:
+                widget.suggestionsBoxConfiguration.suggestionsBoxDecoration,
+            suggestionsBoxVerticalOffset:
+                widget.suggestionsBoxConfiguration.suggestionsBoxVerticalOffset,
+            errorBuilder: widget.errorBuilder,
+            transitionBuilder: widget.transitionBuilder,
+            loadingBuilder: (context) =>
+                widget.loadingBuilder ??
+                SizedBox(
+                  height: 3.0,
+                  child: LinearProgressIndicator(),
                 ),
-              ),
-            );
-          },
-          onSuggestionSelected: (suggestion) {
-            if (_additionItem != suggestion) {
-              setState(() {
-                widget.initialItems.add(suggestion);
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged();
+            noItemsFoundBuilder: widget.emptyBuilder,
+            textFieldConfiguration: widget.textFieldConfiguration.copyWith(
+              focusNode: _focusNode,
+              controller: _textController,
+              enabled: widget.textFieldConfiguration.enabled && !limitEnabled,
+            ),
+            suggestionsCallback: (query) async {
+              if (limitEnabled) {
+                return [];
               }
-              _textController.clear();
-            }
-          },
+              var suggestions = await widget.findSuggestions(query);
+              suggestions.removeWhere(widget.initialItems.contains);
+              if (widget.additionCallback != null && query.isNotEmpty) {
+                var additionItem = widget.additionCallback(query);
+                if (!suggestions.contains(additionItem) &&
+                  !widget.initialItems.contains(additionItem)) {
+                  _additionItem = additionItem;
+                  suggestions.insert(0, additionItem);
+                } else {
+                  _additionItem = null;
+                }
+              }
+              return suggestions;
+            },
+            itemBuilder: (context, item) {
+              var conf = widget.configureSuggestion(item);
+              return ListTile(
+                key: ObjectKey(item),
+                title: conf.title,
+                subtitle: conf.subtitle,
+                leading: conf.leading,
+                trailing: InkWell(
+                  splashColor: conf.splashColor ?? Theme.of(context).splashColor,
+                  borderRadius: conf.splashRadius,
+                  onTap: () async {
+                    if (widget.onAdded != null) {
+                      var _item = await widget.onAdded(item);
+                      if (_item != null) {
+                        widget.initialItems.add(_item);
+                      }
+                    } else {
+                      widget.initialItems.add(item);
+                    }
+                    setState(() {});
+                    if (widget.onChanged != null) {
+                      widget.onChanged();
+                    }
+                    _textController.clear();
+                    _focusNode.unfocus();
+                  },
+                  child: Builder(
+                    builder: (context) {
+                      if (_additionItem != null && _additionItem == item) {
+                        return conf.additionWidget;
+                      } else {
+                        return SizedBox(width: 0);
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              if (_additionItem != suggestion) {
+                setState(() {
+                  widget.initialItems.add(suggestion);
+                });
+                if (widget.onChanged != null) {
+                  widget.onChanged();
+                }
+                _textController.clear();
+              }
+            },
+          ),
         ),
         Wrap(
           alignment: widget.wrapConfiguration.alignment,
