@@ -132,7 +132,7 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
   ///
   final List<T> initialItems;
 
-  // Limit max number of visible items
+  // Limit max number of selectable items
   final int limit;
 
   /// Creates a [FlutterTagging] widget.
