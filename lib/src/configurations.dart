@@ -3,14 +3,14 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead_web/flutter_typeahead.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 ///
 class SuggestionConfiguration {
   /// A widget to display before the title.
   ///
   /// Typically an [Icon] or a [CircleAvatar] widget.
-  final Widget leading;
+  final Widget? leading;
 
   /// The primary content of the list tile.
   ///
@@ -27,7 +27,7 @@ class SuggestionConfiguration {
   ///
   /// If [isThreeLine] is true, this should be configured to take a maximum of
   /// two lines.
-  final Widget subtitle;
+  final Widget? subtitle;
 
   /// Whether this list tile is intended to display three lines of text.
   ///
@@ -43,7 +43,7 @@ class SuggestionConfiguration {
   /// If this property is null then its value is based on [ListTileTheme.dense].
   ///
   /// Dense list tiles default to a smaller height.
-  final bool dense;
+  final bool? dense;
 
   /// The tile's internal padding.
   ///
@@ -54,7 +54,7 @@ class SuggestionConfiguration {
   final EdgeInsetsGeometry contentPadding;
 
   /// A widget to display add to tags.
-  final Widget additionWidget;
+  final Widget? additionWidget;
 
   /// The splash color of the ink response. If this property is null then the
   /// splash color of the theme, [ThemeData.splashColor], will be used.
@@ -64,7 +64,7 @@ class SuggestionConfiguration {
   ///  * [splashFactory], which defines the appearance of the splash.
   ///  * [radius], the (maximum) size of the ink splash.
   ///  * [highlightColor], the color of the highlight.
-  final Color splashColor;
+  final Color? splashColor;
 
   /// The clipping radius of the containing rect.
   ///
@@ -73,7 +73,7 @@ class SuggestionConfiguration {
 
   ///
   const SuggestionConfiguration({
-    @required this.title,
+    required this.title,
     this.subtitle,
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 16.0),
     this.dense,
@@ -90,12 +90,12 @@ class ChipConfiguration {
   /// The primary content of the chip.
   ///
   /// Typically a [Text] widget.
-  final Widget label;
+  final Widget? label;
 
   /// A widget to display prior to the chip's label.
   ///
   /// Typically a [CircleAvatar] widget.
-  final Widget avatar;
+  final Widget? avatar;
 
   /// The style to be applied to the chip's label.
   ///
@@ -110,12 +110,12 @@ class ChipConfiguration {
   ///  * [MaterialState.hovered].
   ///  * [MaterialState.focused].
   ///  * [MaterialState.pressed].
-  final TextStyle labelStyle;
+  final TextStyle? labelStyle;
 
   /// The [ShapeBorder] to draw around the chip.
   ///
   /// Defaults to the shape in the ambient [ChipThemeData].
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
 
   /// {@macro flutter.widgets.Clip}
   final Clip clipBehavior;
@@ -123,18 +123,18 @@ class ChipConfiguration {
   /// Color to be used for the unselected, enabled chip's background.
   ///
   /// The default is light grey.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// The padding between the contents of the chip and the outside [shape].
   ///
   /// Defaults to 4 logical pixels on all sides.
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
   /// The padding around the [label] widget.
   ///
   /// By default, this is 4 logical pixels at the beginning and the end of the
   /// label, and zero on top and bottom.
-  final EdgeInsetsGeometry labelPadding;
+  final EdgeInsetsGeometry? labelPadding;
 
   /// Configures the minimum size of the tap target.
   ///
@@ -143,31 +143,31 @@ class ChipConfiguration {
   /// See also:
   ///
   ///  * [MaterialTapTargetSize], for a description of how this affects tap targets.
-  final MaterialTapTargetSize materialTapTargetSize;
+  final MaterialTapTargetSize? materialTapTargetSize;
 
   /// Elevation to be applied on the chip relative to its parent.
   ///
   /// This controls the size of the shadow below the chip.
   ///
   /// Defaults to 0. The value is always non-negative.
-  final double elevation;
+  final double? elevation;
 
   /// Color of the chip's shadow when the elevation is greater than 0.
   ///
   /// The default is [Colors.black].
-  final Color shadowColor;
+  final Color? shadowColor;
 
   /// The icon displayed when [onDeleted] is set.
   ///
   /// Defaults to an [Icon] widget set to use [Icons.cancel].
-  final Widget deleteIcon;
+  final Widget? deleteIcon;
 
   /// The [Color] for the delete icon. The default is based on the ambient
   /// [IconTheme.color].
-  final Color deleteIconColor;
+  final Color? deleteIconColor;
 
   /// The message to be used for the chip's delete button tooltip.
-  final String deleteButtonTooltipMessage;
+  final String? deleteButtonTooltipMessage;
 
   ///
   const ChipConfiguration({
@@ -296,7 +296,7 @@ class WrapConfiguration {
   /// [crossAxisAlignment] is either [WrapCrossAlignment.start] or
   /// [WrapCrossAlignment.end], or there's more than one child, then the
   /// [textDirection] (or the ambient [Directionality]) must not be null.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Determines the order to lay children out vertically and how to interpret
   /// `start` and `end` in the vertical direction.
@@ -382,7 +382,7 @@ class SuggestionsBoxConfiguration {
 
   /// Used to control the `_SuggestionsBox`. Allows manual control to
   /// open, close, toggle, or resize the `_SuggestionsBox`.
-  final SuggestionsBoxController suggestionsBoxController;
+  final SuggestionsBoxController? suggestionsBoxController;
 
   /// Determine the [SuggestionBox]'s direction.
   ///

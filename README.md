@@ -61,7 +61,8 @@ FlutterTagging<Language>(
     },
     onChanged: () {
       print();
-    }
+    },
+    limit: 5, //Set the max number of tags that you can create/select. Default or if unspecified (unlimited)
 );
 
 /// LanguageService

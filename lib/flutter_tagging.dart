@@ -4,7 +4,7 @@
 
 library flutter_tagging;
 
-export 'package:flutter_typeahead_web/flutter_typeahead.dart';
+export 'package:flutter_typeahead/flutter_typeahead.dart';
 
 export 'src/configurations.dart';
 export 'src/taggable.dart';
