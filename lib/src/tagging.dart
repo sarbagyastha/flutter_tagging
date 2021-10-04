@@ -70,7 +70,7 @@ class FlutterTagging<T extends Taggable> extends StatefulWidget {
   /// It is provided with the suggestions box instance and the animation
   /// controller, and expected to return some animation that uses the controller
   /// to display the suggestion box.
-  final dynamic Function(BuildContext, Widget, AnimationController)
+  final Widget Function(BuildContext, Widget, AnimationController)
       transitionBuilder;
 
   /// The configuration of suggestion box.
